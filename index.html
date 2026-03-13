@@ -3,279 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Lotto Generator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <title>TOEIC 500 Voca Master</title>
     <style>
-        /* --- CSS 영역 --- */
         :root {
-            /* Light Mode (Default) */
-            --bg-color: #f0f2f5;
-            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Light Mode */
+            --primary: #4a6cf7;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --bg: #f4f7fe;
             --card-bg: #ffffff;
             --text-main: #1a1a1a;
-            --text-sub: #666666;
-            --btn-bg: #1a1a1a;
-            --btn-text: #ffffff;
-            --placeholder-border: #e0e0e0;
-            --toggle-bg: rgba(255, 255, 255, 0.2);
+            --text-sub: #333333;
+            --details-bg: #f8f9ff;
+            --border-color: #eeeeee;
         }
 
         [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            /* Dark Mode */
+            --bg: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --btn-bg: #384459;
-            --btn-text: #f8fafc;
-            --placeholder-border: #334155;
-            --toggle-bg: rgba(0, 0, 0, 0.3);
+            --text-sub: #cbd5e1;
+            --details-bg: #0f172a;
+            --border-color: #334155;
+            --secondary: #94a3b8;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg-gradient);
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            transition: background 0.3s ease;
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
         }
 
-        .lotto-card {
+        .container {
+            width: 95%;
+            max-width: 600px;
             background: var(--card-bg);
-            padding: 3rem 2rem 2.5rem;
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             text-align: center;
-            width: 90%;
-            max-width: 480px;
             position: relative;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: background-color 0.3s ease;
         }
 
         .theme-toggle {
             position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
+            top: 20px;
+            right: 20px;
         }
 
         #theme-btn {
-            background: var(--toggle-bg);
-            border: none;
+            background: var(--bg);
+            border: 1px solid var(--border-color);
             width: 44px;
             height: 44px;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             transition: all 0.2s ease;
-            backdrop-filter: blur(4px);
+            color: var(--text-main);
         }
 
         #theme-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
+            transform: scale(1.05);
+            background: var(--details-bg);
         }
 
-        h1 { 
-            font-size: 2rem;
-            color: var(--text-main); 
-            margin-bottom: 0.5rem; 
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--border-color);
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        #progress {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .word-card {
+            margin: 30px 0;
+            min-height: 280px;
+        }
+
+        #word {
+            font-size: 3.5rem;
             font-weight: 800;
-            letter-spacing: -0.025em;
-            transition: color 0.3s ease;
+            color: var(--primary);
+            margin-bottom: 15px;
+            letter-spacing: -0.02em;
         }
 
-        .subtitle { 
-            color: var(--text-sub); 
-            margin-bottom: 2.5rem; 
-            font-size: 1rem; 
-            font-weight: 500;
-            transition: color 0.3s ease;
+        #meaning {
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            font-weight: 600;
         }
 
-        .lotto-numbers {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
-            margin-bottom: 3rem;
-            min-height: 56px;
-        }
-
-        /* 로또 공 기본 스타일 */
-        .ball {
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            box-shadow: 
-                inset -4px -4px 10px rgba(0,0,0,0.3),
-                0 8px 15px rgba(0,0,0,0.2);
-            animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-
-        /* 초기 빈 공 자리 */
-        .ball-placeholder {
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            border: 2px dashed var(--placeholder-border);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--placeholder-border);
-            font-size: 1.2rem;
-            transition: border-color 0.3s ease;
-        }
-
-        /* 번호 대역별 색상 설정 (실제 로또 기준) */
-        .range-1  { background: radial-gradient(circle at 35% 35%, #fcd34d, #f59e0b); } /* 1-10: 노랑 */
-        .range-11 { background: radial-gradient(circle at 35% 35%, #60a5fa, #2563eb); } /* 11-20: 파랑 */
-        .range-21 { background: radial-gradient(circle at 35% 35%, #f87171, #dc2626); } /* 21-30: 빨강 */
-        .range-31 { background: radial-gradient(circle at 35% 35%, #94a3b8, #475569); } /* 31-40: 회색 */
-        .range-41 { background: radial-gradient(circle at 35% 35%, #a3e635, #65a30d); } /* 41-45: 초록 */
-
-        @keyframes pop {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        #generate-btn {
-            background: var(--btn-bg);
-            color: var(--btn-text);
-            border: none;
-            padding: 1.2rem;
+        .details {
+            text-align: left;
+            background: var(--details-bg);
+            padding: 24px;
             border-radius: 16px;
-            font-size: 1.15rem;
+            border-left: 6px solid var(--primary);
+            transition: background-color 0.3s ease;
+        }
+
+        .details p { margin: 12px 0; line-height: 1.6; color: var(--text-sub); }
+        .label { font-weight: 700; color: var(--secondary); display: inline-block; width: 80px; font-size: 0.95rem; }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        button.nav-btn {
+            flex: 1;
+            padding: 18px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-            letter-spacing: -0.01em;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
         }
 
-        #generate-btn:hover:not(:disabled) {
-            transform: translateY(-2px) scale(1.02);
-            filter: brightness(1.2);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-        }
+        #prev-btn { background: var(--bg); color: var(--text-sub); border: 1px solid var(--border-color); }
+        #next-btn { background: var(--primary); color: white; box-shadow: 0 4px 14px 0 rgba(74, 108, 247, 0.39); }
+        
+        button:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+        button:active:not(:disabled) { transform: translateY(0); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        #generate-btn:active:not(:disabled) {
-            transform: translateY(0) scale(0.98);
-        }
-
-        #generate-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .info { margin-top: 20px; color: var(--secondary); font-size: 1rem; font-weight: 500; }
 
         @media (max-width: 480px) {
-            .lotto-card { padding: 2.5rem 1.5rem 2rem; }
-            .lotto-numbers { gap: 8px; }
-            h1 { font-size: 1.75rem; }
+            .container { padding: 40px 20px; }
+            #word { font-size: 2.8rem; }
+            #meaning { font-size: 1.4rem; }
+            .btn-group { flex-direction: column-reverse; }
         }
     </style>
 </head>
 <body>
 
-    <div class="lotto-card">
-        <div class="theme-toggle">
-            <button id="theme-btn" title="테마 변경">
-                <span id="theme-icon">🌙</span>
-            </button>
-        </div>
-        
-        <h1>Lotto 6/45</h1>
-        <p class="subtitle">오늘의 행운을 잡으세요!</p>
-        
-        <div id="lotto-numbers" class="lotto-numbers">
-            <div class="ball-placeholder">?</div>
-            <div class="ball-placeholder">?</div>
-            <div class="ball-placeholder">?</div>
-            <div class="ball-placeholder">?</div>
-            <div class="ball-placeholder">?</div>
-            <div class="ball-placeholder">?</div>
-        </div>
-
-        <button id="generate-btn">행운의 번호 생성</button>
+<div class="container">
+    <div class="theme-toggle">
+        <button id="theme-btn" title="테마 변경">
+            <span id="theme-icon">🌙</span>
+        </button>
     </div>
 
-    <script>
-        /* --- JavaScript 영역 --- */
-        const generateBtn = document.getElementById('generate-btn');
-        const numbersContainer = document.getElementById('lotto-numbers');
-        const themeBtn = document.getElementById('theme-btn');
-        const themeIcon = document.getElementById('theme-icon');
+    <div class="progress-bar"><div id="progress"></div></div>
+    <div class="info"><span id="current-index">1</span> / <span id="total-count">0</span></div>
 
-        // 테마 관리
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeIcon.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+    <div class="word-card">
+        <div id="word">Loading...</div>
+        <div id="meaning">의미</div>
+        
+        <div class="details">
+            <p><span class="label">예문:</span> <span id="example">...</span></p>
+            <p><span class="label">동의어:</span> <span id="synonym" style="color: var(--success);">...</span></p>
+            <p><span class="label">반의어:</span> <span id="antonym" style="color: var(--danger);">...</span></p>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button id="prev-btn" class="nav-btn">이전 단어</button>
+        <button id="next-btn" class="nav-btn">다음 단어 (Space)</button>
+    </div>
+</div>
+
+<script>
+    // 테마 관리
+    const themeBtn = document.getElementById('theme-btn');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeIcon.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        themeIcon.innerText = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+
+    initTheme();
+
+    // 500개 데이터를 담는 곳 (샘플 10개 제공, 이후 추가 가능)
+    const vocaData = [
+        { word: "Collaborate", meaning: "협력하다, 공동으로 작업하다", example: "We need to collaborate on this project.", synonym: "Cooperate, Work together", antonym: "Compete, Conflict" },
+        { word: "Postpone", meaning: "연기하다, 미루다", example: "The meeting has been postponed until next week.", synonym: "Delay, Put off", antonym: "Advance, Forward" },
+        { word: "Implement", meaning: "시행하다, 실행하다", example: "The new policy will be implemented tomorrow.", synonym: "Execute, Carry out", antonym: "Halt, Cancel" },
+        { word: "Comprehensive", meaning: "종합적인, 포괄적인", example: "We offer a comprehensive training program.", synonym: "Inclusive, Thorough", antonym: "Limited, Partial" },
+        { word: "Terminate", meaning: "종료하다, 끝내다", example: "The contract was terminated early.", synonym: "End, Finish", antonym: "Begin, Start" },
+        { word: "Mandatory", meaning: "의무적인, 필수의", example: "Attendance at the seminar is mandatory.", synonym: "Compulsory, Required", antonym: "Optional, Voluntary" },
+        { word: "Prospective", meaning: "유망한, 장래의", example: "We interviewed several prospective employees.", synonym: "Potential, Future", antonym: "Unlikely" },
+        { word: "Affordable", meaning: "가격이 알맞은, 감당할 수 있는", example: "They sell high-quality goods at affordable prices.", synonym: "Inexpensive, Reasonable", antonym: "Expensive, Costly" },
+        { word: "Amended", meaning: "개정된, 수정된", example: "The legislative bill was amended yesterday.", synonym: "Revised, Modified", antonym: "Fixed, Unchanged" },
+        { word: "Preliminary", meaning: "예비의, 서두의", example: "The preliminary results are encouraging.", synonym: "Initial, Introductory", antonym: "Final, Concluding" }
+    ];
+
+    let currentIndex = 0;
+
+    const wordEl = document.getElementById('word');
+    const meaningEl = document.getElementById('meaning');
+    const exampleEl = document.getElementById('example');
+    const synonymEl = document.getElementById('synonym');
+    const antonymEl = document.getElementById('antonym');
+    const progressEl = document.getElementById('progress');
+    const currentIndexEl = document.getElementById('current-index');
+    const totalCountEl = document.getElementById('total-count');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+
+    function updateCard() {
+        const data = vocaData[currentIndex];
+        wordEl.innerText = data.word;
+        meaningEl.innerText = data.meaning;
+        exampleEl.innerText = data.example;
+        synonymEl.innerText = data.synonym;
+        antonymEl.innerText = data.antonym;
+
+        // 상태 업데이트
+        currentIndexEl.innerText = currentIndex + 1;
+        totalCountEl.innerText = vocaData.length;
+        const percent = ((currentIndex + 1) / vocaData.length) * 100;
+        progressEl.style.width = percent + '%';
+
+        // 버튼 활성화 제어
+        prevBtn.disabled = currentIndex === 0;
+        if(currentIndex === vocaData.length - 1) {
+            nextBtn.innerText = "처음부터 다시";
+        } else {
+            nextBtn.innerText = "다음 단어 (Space)";
         }
+    }
 
-        themeBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeIcon.innerText = newTheme === 'dark' ? '☀️' : '🌙';
-        });
-
-        initTheme();
-
-        // 번호에 따른 색상 클래스 반환
-        function getBallColorClass(num) {
-            if (num <= 10) return 'range-1';
-            if (num <= 20) return 'range-11';
-            if (num <= 30) return 'range-21';
-            if (num <= 40) return 'range-31';
-            return 'range-41';
+    nextBtn.addEventListener('click', () => {
+        if (currentIndex < vocaData.length - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0;
         }
+        updateCard();
+    });
 
-        // 1~45 중 중복 없는 6개 번호 생성 및 정렬
-        function generateLottoNumbers() {
-            const numbers = new Set();
-            while (numbers.size < 6) {
-                numbers.add(Math.floor(Math.random() * 45) + 1);
-            }
-            return Array.from(numbers).sort((a, b) => a - b);
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCard();
         }
+    });
 
-        generateBtn.addEventListener('click', () => {
-            generateBtn.disabled = true;
-            
-            const luckyNumbers = generateLottoNumbers();
-            numbersContainer.innerHTML = ''; 
+    // 키보드 스페이스바 지원
+    window.addEventListener('keydown', (e) => {
+        if(e.code === "Space") {
+            e.preventDefault();
+            nextBtn.click();
+        }
+    });
 
-            luckyNumbers.forEach((num, index) => {
-                setTimeout(() => {
-                    const ball = document.createElement('div');
-                    ball.className = `ball ${getBallColorClass(num)}`;
-                    ball.innerText = num;
-                    numbersContainer.appendChild(ball);
+    updateCard();
+</script>
 
-                    if (index === luckyNumbers.length - 1) {
-                        generateBtn.disabled = false;
-                    }
-                }, index * 120);
-            });
-        });
-    </script>
 </body>
 </html>

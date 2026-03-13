@@ -1,28 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto Number Generator</title>
+    <title>Premium Lotto Generator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* --- CSS 영역 --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-sub: #777777;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .lotto-card {
+            background: var(--card-bg);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            transition: transform 0.3s ease;
+        }
+
+        h1 { 
+            font-size: 1.8rem;
+            color: var(--text-main); 
+            margin-bottom: 0.5rem; 
+            font-weight: 700;
+        }
+
+        .subtitle { 
+            color: var(--text-sub); 
+            margin-bottom: 2.5rem; 
+            font-size: 0.95rem; 
+        }
+
+        .lotto-numbers {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            min-height: 52px; /* 공이 생기기 전 높이 유지 */
+        }
+
+        /* 로또 공 기본 스타일 */
+        .ball {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: inset -4px -4px 6px rgba(0,0,0,0.2), 2px 5px 12px rgba(0,0,0,0.15);
+            animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* 초기 빈 공 자리 */
+        .ball-placeholder {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px dashed #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e0e0e0;
+            font-size: 1.2rem;
+        }
+
+        /* 번호 대역별 색상 설정 (실제 로또 기준) */
+        .range-1  { background: radial-gradient(circle at 30% 30%, #fbc400, #ff8c00); } /* 1-10: 노랑 */
+        .range-11 { background: radial-gradient(circle at 30% 30%, #69c8f2, #0076ba); } /* 11-20: 파랑 */
+        .range-21 { background: radial-gradient(circle at 30% 30%, #ff7272, #d13333); } /* 21-30: 빨강 */
+        .range-31 { background: radial-gradient(circle at 30% 30%, #aaaaaa, #666666); } /* 31-40: 회색 */
+        .range-41 { background: radial-gradient(circle at 30% 30%, #b0d840, #5d9017); } /* 41-45: 초록 */
+
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        #generate-btn {
+            background: #1a1a1a;
+            color: #ffffff;
+            border: none;
+            padding: 1.1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            letter-spacing: -0.5px;
+        }
+
+        #generate-btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #generate-btn:active {
+            transform: translateY(0);
+        }
+
+        #generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-    <div class="lotto-ticket">
-        <h1>Lotto Number Generator</h1>
+
+    <div class="lotto-card">
+        <h1>Lotto 6/45</h1>
+        <p class="subtitle">오늘의 행운을 잡으세요!</p>
+        
         <div id="lotto-numbers" class="lotto-numbers">
-            <!-- Numbers will be generated here -->
-            <div class="ball" style="background-color: #ddd; opacity: 0.3;">?</div>
-            <div class="ball" style="background-color: #ddd; opacity: 0.3;">?</div>
-            <div class="ball" style="background-color: #ddd; opacity: 0.3;">?</div>
-            <div class="ball" style="background-color: #ddd; opacity: 0.3;">?</div>
-            <div class="ball" style="background-color: #ddd; opacity: 0.3;">?</div>
-            <div class="ball" style="background-color: #ddd; opacity: 0.3;">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder) ">?</div>
+            <div class="ball-placeholder">?</div>
+            <div class="ball-placeholder">?</div>
         </div>
-        <button id="generate-btn">Generate Numbers</button>
+
+        <button id="generate-btn">번호 생성하기</button>
     </div>
-    <script src="main.js"></script>
+
+    <script>
+        /* --- JavaScript 영역 --- */
+        const generateBtn = document.getElementById('generate-btn');
+        const numbersContainer = document.getElementById('lotto-numbers');
+
+        // 번호에 따른 색상 클래스 반환
+        function getBallColorClass(num) {
+            if (num <= 10) return 'range-1';
+            if (num <= 20) return 'range-11';
+            if (num <= 30) return 'range-21';
+            if (num <= 40) return 'range-31';
+            return 'range-41';
+        }
+
+        // 1~45 중 중복 없는 6개 번호 생성 및 정렬
+        function generateLottoNumbers() {
+            const numbers = [];
+            while (numbers.length < 6) {
+                const num = Math.floor(Math.random() * 45) + 1;
+                if (!numbers.includes(num)) {
+                    numbers.push(num);
+                }
+            }
+            return numbers.sort((a, b) => a - b);
+        }
+
+        generateBtn.addEventListener('click', () => {
+            // 애니메이션 도중 중복 클릭 방지
+            generateBtn.disabled = true;
+            
+            const luckyNumbers = generateLottoNumbers();
+            numbersContainer.innerHTML = ''; // 기존 공 제거
+
+            luckyNumbers.forEach((num, index) => {
+                // 0.15초 간격으로 하나씩 공이 생성되도록 설정
+                setTimeout(() => {
+                    const ball = document.createElement('div');
+                    ball.className = `ball ${getBallColorClass(num)}`;
+                    ball.innerText = num;
+                    numbersContainer.appendChild(ball);
+
+                    // 마지막 공까지 다 나오면 버튼 다시 활성화
+                    if (index === luckyNumbers.length - 1) {
+                        generateBtn.disabled = false;
+                    }
+                }, index * 150);
+            });
+        });
+    </script>
 </body>
 </html>
